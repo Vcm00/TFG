@@ -1,0 +1,843 @@
+---
+output:
+  pdf_document:
+    latex_engine: pdflatex
+    citation_package: natbib
+    number_sections: yes
+    keep_tex: yes
+    toc: yes
+    toc_depth: 3
+    highlight: default
+    includes:
+        #in_header: preamble.tex
+        before_body: before_body.tex
+        geometry: "a4paper"
+header-includes:
+#- \documentclass[a4paper]{article}
+#- \usepackage[12pt]{extsizes}
+- \usepackage{mathptmx}
+- \usepackage[T1]{fontenc}
+- \usepackage[spanish]{babel}
+- \usepackage{setspace}
+- \setstretch{1.5}
+- \usepackage{ragged2e}
+- \usepackage{footmisc}
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- \usepackage{tocloft}
+- \setlength\cftaftertoctitleskip{2\baselineskip}
+- \renewcommand{\cftsecfont}{\normalfont}
+- \renewcommand{\cftsubsecfont}{\normalfont}
+- \usepackage[nottoc, numbib]{tocbibind}
+- \usepackage{caption}
+- \usepackage{graphicx}
+- \usepackage{float}
+- \floatplacement{figure}{H}
+- \usepackage{chngcntr}
+- \counterwithin{figure}{section}
+- \counterwithin{table}{section}
+- \usepackage{apacite}
+- \makeindex
+- \addto\captionsspanish{ \renewcommand{\tablename}{Tabla} \renewcommand{\listtablename}{Índice
+  de tablas}}
+- \usepackage{multirow}
+- \usepackage{longtable}
+- \fontsize{12}{14}\selectfont
+tables: yes
+bibliography: TFGnote.bib
+biblio-style: apalike
+link-citations: yes
+colorlinks: yes
+linkcolor: blue
+citecolor: blue
+toccolor: black
+urlcolor: blue
+lof: no
+lot: no
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+
+
+\newpage
+
+```{r setup, include=FALSE}
+
+# Opción de mostrar el código R en el documento final. Si se establece en TRUE, el código R se mostrará en el documento final. Si se establece en FALSE, el código R no se mostrará en el documento final
+
+knitr::opts_chunk$set(echo = T)
+```
+
+```{r, include=FALSE}
+
+# Con la función "library" se cargan los paquetes necesarios para ejecutar diferentes funciones
+library(tinytex)
+library(vcd)
+library(grid)
+library(tidyverse)
+library(DescTools)
+library(corrplot)
+```
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+
+# Cargar la base de datos 
+load("d.rda")
+
+```
+
+
+\newpage
+
+# Introducción
+
+En el contexto de España y a lo largo de los años, ha sido un país que ha experimentado un flujo migratorio significativo proveniente de diversas naciones, cabe destacar la presencia de inmigrantes procedentes de Marruecos, Rumanía y países del sur de América, entre muchos otros.
+Y siempre se ha caracterizado por ser un país acogedor gracias a su actitud hospitalaria y apertura hacia las personas extranjeras tanto comunitarias como no comunitarias (Fernández et al., 2017).
+No obstante, en un contexto social en constante cambio, resulta fundamental indagar si las tendencias positivas hacia la inmigración se mantienen vigentes en la actualidad.
+Pues esta realidad multicultural también ha puesto de manifiesto la existencia de discriminación y actitudes racistas hacia aquellos individuos que no poseen la nacionalidad española o que no se ajustan a la apariencia estereotípica de persona española, es decir y mayoritariamente, gente blanca.
+Es por ello que el fenómeno del racismo y la xenofobia ha sido objeto de estudio y análisis exhaustivos a lo largo de los años, en virtud de su complejidad y relevancia en la sociedad contemporánea.
+
+En este contexto, es necesario explorar y evaluar la continuidad de la actitud positiva hacia los extranjeros en España, así como detectar posibles cambios o desviaciones en las percepciones y actitudes de la sociedad española hacia la inmigración. El objetivo de esta investigación es obtener una visión actualizada y precisa del clima social y la aceptación de los migrantes en el país. Para abordar de manera exhaustiva y profunda este fenómeno social complejo, se realizó un análisis detallado de diversas variables sociales que pueden influir en los perfiles racistas y no racistas presentes en la población española, con el propósito de comprender mejor a esta población y los factores sociales que influyen en sus actitudes. Asimismo, este estudio busca proporcionar una perspectiva actualizada sobre la situación en España. Para lograr este objetivo, se utilizó el Barómetro del CIS de junio de 2021 como fuente de datos.
+
+Seguidamente de este apartado, se ha llevado a cabo el marco teórico basado en teorías y trabajos previamente realizados sobre el tema de inmigración, racismo y xenofobia.
+Lo que ha permitido tener un fundamento conceptual sólido que respalda el análisis posterior.
+
+En cuanto a la metodología empleada, se ha realizado un análisis cuantitativo que incluye tanto univariante como bivariante, utilizando técnicas y herramientas estadísticas en el entorno de programación R y RMarkdown.
+Se ha prestado especial atención a una amplia gama de variables sociales que han sido previamente estudiadas y que se ha demostrado que guardan una dependencia con el racismo y la xenofobia, según la investigación académica llevada a cabo por reconocidos autores en el campo (Fernández et al., 2017; Gualda et al., 2023; Cea D'Ancona y Valles Martínez, 2014).
+Estas variables incluyen el sexo, la edad, el tamaño de municipio, la religión, el nivel educativo, la situación laboral, la ocupación, la escala ideológica, la clase social, y la valoración económica personal.
+Además, se han considerado dos variables dependientes relacionadas con el grado de positividad hacia la inmigración en España y la valoración del número de inmigrantes en el país.
+
+El objetivo ha sido identificar las variables que presentan una relación significativa con los perfiles racistas y, al mismo tiempo, determinar la fuerza de asociación de estas variables, es decir, cuál de ellas ejerce una influencia más determinante en la manifestación de actitudes racistas.
+
+Para ello, y para comenzar, se ha realizado un minucioso análisis univariante con el fin de adquirir una comprensión más profunda de la muestra de estudio.
+En este sentido, se han examinado de manera general las variables dependientes e independientes a través de la elaboración de tablas de frecuencias, las cuales se encuentran detalladas en los anexos[^5] adjuntos al informe para evitar sobrecargarlo con información redundante.
+
+[^5]: Veáse el documento de anexos, apartado 2, página 17.
+
+Asimismo, se ha llevado a cabo un análisis complementario para las variables numéricas, mediante la aplicación de medidas de centralización y dispersión.
+Esta aproximación ha permitido obtener una visión más detallada y precisa de las características presentes en la muestra de estudio en cuestión.
+
+Por otro lado, en el análisis bivariante, se ha llevado a cabo un análisis de significación con respecto a las variables dependientes, identificando aquellas que presentan una relación estadísticamente significativa mediante el Chi-cuadrado.
+Aquellas variables que han mostrado una asociación significativa han sido sometidas a un análisis adicional mediante el uso de medidas de asociación nominales y ordinales, a fin de cuantificar la fuerza de relación entre las variables consideradas.
+Posteriormente, se ha procedido a la construcción de tablas de contingencia utilizando el porcentaje de fila, lo cual ha permitido examinar de manera más precisa los grupos dentro de cada variable independiente en términos de su nivel de racismo.
+
+Basándonos en las variables seleccionadas y teniendo en cuenta los perfiles identificados en Cea D'Ancona (2004), se ha llevado a cabo un análisis de los perfiles predominantes en España en relación a las actitudes hacia la inmigración.
+Estos perfiles representan las diversas posturas y comportamientos adoptados por la población española en relación a este fenómeno social, por lo que contribuyen a una comprensión más completa de este fenómeno social.
+
+En resumen, el presente estudio tiene como propósito arrojar luz sobre los factores que influyen en los perfiles racistas presentes en la población española, mediante un análisis riguroso y detallado de una amplia variedad de variables sociodemográficas.
+Mediante la aplicación de técnicas estadísticas avanzadas, se espera obtener una comprensión más completa de este fenómeno social complejo.
+
+## Introducción a R
+
+La historia de R se remonta a 1993, cuando Robert Gentleman y Ross Ihaka, con el propósito de brindar un entorno estadístico para sus clases universitarias, crearon este lenguaje de programación (Chacón, 2021).
+Cabe destacar que R se basó en S, un lenguaje pionero desarrollado por los laboratorios Bell.
+De esta manera, R heredó muchas de las características y funcionalidades de su predecesor, y a su vez, fue enriquecido y mejorado por la comunidad de desarrolladores (CRG, 2021).
+
+Una de las principales ventajas de R es su naturaleza como software de código abierto, lo que significa que está disponible de forma gratuita para múltiples sistemas operativos, como Windows, MacOS y Linux. Esta accesibilidad y disponibilidad han contribuido significativamente a la popularidad y adopción de R en diversos campos. Además, es importante destacar la amplia comunidad de usuarios que rodea a R. La colaboración y el intercambio de conocimientos en esta comunidad han dado lugar a un extenso repositorio de paquetes, que son conjuntos de funciones y datos específicos, así como a scripts escritos en lenguaje R, que permiten realizar tareas específicas. Esta biblioteca de recursos proporciona a los usuarios de R una amplia gama de herramientas y soluciones para abordar diversas problemáticas y realizar análisis de datos.
+
+Es por ello que la elección de utilizar R no fue casual, ya que es reconocido como uno de los software más relevantes en el ámbito de la estadística.
+Su versatilidad y amplia gama de funciones especializadas en análisis de datos hacen de él una instrumento imprescindible para los sociólogos tanto en el entorno empresarial como para aquellos interesados en el ámbito de la ciencia y análisis de datos.
+
+En aras de cumplir con el objetivo de "Adquirir un dominio sólido en el aprendizaje metodológico con R", presento este trabajo académico que ha sido desarrollado íntegramente utilizando dicha herramienta.
+Desde la estructura del índice hasta la bibliografía.
+Todo ha sido configurado cuidadosamente en R y basándome en la sintaxis de \LaTeX.
+Del mismo modo, todas las tablas y análisis estadísticos también han sido realizados utilizando esta herramienta.
+Y aunque en apariencia puede parecer una tarea sencilla, se invita al lector a explorar los anexos adjuntos para apreciar en detalle todo lo que ha sido logrado a través del uso de R.
+Estos anexos proporcionan una visión integral de las diversas etapas y procesos llevados a cabo, brindando una perspectiva enriquecedora de los resultados obtenidos.
+Además, cada paso dado ha sido exhaustivamente explicado para facilitar al lector su comprensión.
+
+Es importante resaltar que parte fundamental de este trabajo ha implicado el manejo de un nuevo software, el cual no ha sido enseñado en el currículo académico del grado.
+Esta experiencia de aprendizaje autónomo ha demostrado mi capacidad para enfrentar desafíos y adquirir nuevas habilidades de forma independiente.  
+
+Es fundamental destacar que la elaboración de un script explicativo no solo es beneficioso para el presente trabajo, sino que también tiene la ventaja de ser reproducible para futuros proyectos e investigaciones.
+Esta característica distintiva permite que otros investigadores, al modificar la base de datos utilizada en sus estudios, puedan aprovechar el mismo script y obtener resultados coherentes y comparables.
+En este sentido, mi trabajo no solo contribuye al avance de mis propias investigaciones, sino que también facilita el intercambio de conocimientos y promueve la eficiencia en la comunidad académica.
+
+En conclusión, mediante el uso integral del lenguaje de programación R, he logrado no solo cumplir con el objetivo de este trabajo, sino también adquirir valiosas habilidades autodidactas y adicionales en el manejo de un software altamente relevante en el ámbito de la estadística, comenzando así con mi carrera profesional de analista de datos.
+La capacidad de generar análisis y resultados reproducibles representa un gran avance tanto para mis investigaciones futuras como para otros investigadores que puedan beneficiarse de este trabajo.
+
+# Marco teórico
+
+## Conceptualización de la inmigración en España
+
+Desde los años 90, España ha sido testigo de un ciclo migratorio sin precedentes de inmigrantes procedentes de países africanos y latinoamericanos.
+El crecimiento económico, el ingreso en la Unión Europea y la apertura de fronteras han convertido a España en un destino atractivo para personas de diversas nacionalidades y continentes (Consejo Económico y Social de España, 2019).
+El auge de los sectores de la construcción, el turismo y los servicios ha generado una demanda de mano de obra extranjera, que ha contribuido al dinamismo económico del país.
+Lo que la ha convertido en uno de los países receptores de inmigrantes más destacados a nivel mundial.
+Este proceso migratorio ha experimentado una evolución significativa en las últimas décadas, generando una transformación demográfica y sociocultural de una envergadura considerable.
+Posteriormente, la crisis económica mundial de 2008 tuvo un impacto significativo en el mercado laboral y provocó una disminución en el número de inmigrantes.
+Aunque, actualmente, la población residente en España asciende a 47.615.0341 personas, de las cuales 5.579.9471 son inmigrantes, es decir, personas procedentes del extranjero, según datos del Instituto Nacional de Estadística (INE) correspondientes al 1 de julio de 2022.
+Estos números revelan que aproximadamente un 12% de la población total del país está compuesto por individuos de origen extranjero, lo que marca un máximo histórico en términos de diversidad poblacional en España.
+Entre la población extranjera residente en España, se observa una diversidad de países de origen, algunas de las principales nacionalidades de los inmigrantes son Marruecos, Rumanía, Colombia, Reino Unido o Italia.
+Estas son solo algunas de las muchas nacionalidades presentes en la población extranjera residente en España.
+
+El proceso de inmigración en España ha supuesto un desafío en términos de integración y cohesión social.
+Además, y citando la noticia del PAÍS "Los cinco principales desafíos de España en cuestión de migraciones y asilo", debido a la pandemia del COVID-19, ha habido un cambio en el orden de las prioridades respecto a las políticas del Gobierno, por lo que la actuación a favor de los inmigrantes ha quedado en un segundo plano (Barciela, y Ares, 2021).
+A esto hay que sumarle el auge de la derecha y el individualismo propiciando así un mayor racismo.
+En cuanto al auge de la derecha, un discurso nacionalista creciente se ha insertado en nuestra sociedad desde la crisis de 2008.
+La derecha se caracteriza por ofrecer cifras desproporcionadas, repetir bulos o presentar propuestas imprecisas que muchas veces no se sostienen con los datos o la ley en la mano (Monzón, et al., 2019).
+
+Es por ello que surge la sociología de las migraciones, que se basa en estudiar los fenómenos migratorios desde un punto de vista social, agrupando en sí diferentes disciplinas como la economía, política o historia para comprender las consecuencias, experiencias, causas y dinámicas sociales de dichos procesos.
+
+Sin embargo, resulta imperativo establecer inicialmente las definiciones conceptuales que serán tratadas a lo largo del presente informe para abordar el objeto de estudio de manera adecuada.
+Por lo tanto, la inmigración puede ser conceptualizada como "el proceso mediante el cual individuos no nacionales acceden a un país con el propósito de establecerse en él" (OIM, 2006, pp. 32).
+Sin embargo, es pertinente reconocer que el término "inmigrante" en sí mismo es una construcción social, tal como hemos adquirido conocimiento en el ámbito de la sociología.
+De hecho, se evidencia que a menudo empleamos distintas etiquetas para referirnos a personas que quizás no pertenezcan a ese grupo o que no se auto identifiquen como tal, lo cual demuestra que esta definición se encuentra sujeta a la percepción individual y se ve influida por la actitud de cada individuo (Buraschi y Godenau, 2020).
+
+Esta construcción social del término "inmigrante" se hace patente cuando calificamos como tal a las personas provenientes de países africanos y sudamericanos, mientras que a aquellos inmigrantes provenientes de países europeos que se trasladan a España con fines de jubilación, frecuentemente se les denomina "extranjeros", lo cual conlleva una connotación completamente diferente.
+Esto ocurre también con los denominados "inmigrantes de segunda" (García Borrego, 2005), aquellos individuos que son hijos de inmigrantes, nacidos y criados en España, y que, sin embargo, son percibidos y tratados de manera distinta debido a su ascendencia migrante.
+Esta percepción subjetiva está influenciada por prejuicios y estereotipos arraigados en la sociedad que afectan negativamente.
+Dependiendo del origen de un individuo, se utiliza una u otra denominación para referirse a su condición, lo cual refleja los prejuicios y estereotipos arraigados en nuestra sociedad.
+
+
+De hecho, tras la revisión de diferentes informes nacionales, al preguntar a la sociedad qué se les viene a la cabeza cuando se habla de inmigrantes, en la década de los 90, la mayoría piensan en marroquíes y norteafricanos representando más del 50% de las respuestas.
+Es entre 2008 y 2011 cuando se empareja a los máximos logrados por los "latinoamericanos".
+Por otro lado, los europeos comunitarios nunca han pasado del 3%.
+(D'Ancona, y Valles Martínez,2013).
+Otro estudio, revela que algo menos de la mitad de la población asocia en su imaginario colectivo población inmigrante con marroquíes; una quinta parte con población africana; y un 16 % con población latinoamericana.
+A pesar de ello, un notable 23,5 % no hace distinción, ni por procedencia, ni por etiqueta alguna.
+(Gualda et al., 2023).
+
+En síntesis, al analizar el fenómeno de la inmigración, resulta esencial reconocer que el término "inmigrante" es una construcción social que varía en función de la percepción individual y está influida por la actitud de cada individuo.
+Esta variabilidad en las etiquetas empleadas para describir a los individuos inmigrantes, dependiendo de su origen, revela la existencia de prejuicios y estereotipos arraigados, y se encuentra estrechamente vinculada con la aporofobia y el rechazo hacia ciertos grupos de personas convirtiéndose en el fenómeno del racismo.
+
+Es por tanto, necesario definir el concepto de racismo, que según la Organización Internacional para las Migraciones (OIM, 2006), lo define como:
+
+"Concepción ideológica que asigna a cierta raza o grupo étnico una posición de fuerza superior, en función de sus cualidades físicas o culturales, así como por dominio económico u otro. El racismo puede ser definido como una doctrina o creencia basada en la superioridad racial. Ello incluye la creencia de que la raza determina la inteligencia, las características culturales y las actitudes morales. El racismo incluye prejuicio racial y discriminación racial." (pp. 51).
+
+Sin embargo, esta es solo una definición de racismo, pues autores como Van-Dijk, T. A.
+(1994) definen el racismo desde una implicación de la raza, pero sobre todo desde una forma de abuso de poder del grupo dominante blanco, lo que conlleva una dominación.
+
+Además, autores como Wieviorka (2009) hablan de cuatro niveles políticamente diferentes de racismo: infrarracismo, racismo disperso, racismo institucionalizado y racismo total.
+En el análisis de los niveles del racismo, se pueden identificar cuatro niveles distintos de intensidad y alcance del fenómeno.
+
+En el primer nivel, conocido como infrarracismo, el racismo se caracteriza por ser débil y disperso.
+Los prejuicios y rumores raciales no tienen un impacto práctico significativo, y la violencia es difusa y localizada.\
+A medida que se avanza hacia el segundo nivel, llamado racismo disperso, el fenómeno se consolida y adquiere mayor tangibilidad.
+La violencia racial se vuelve más frecuente y grave.
+El tercer nivel, denominado racismo institucionalizado y/o político, implica la penetración del racismo en las instituciones y su incorporación en el debate político.
+Las instituciones contribuyen activamente a la discriminación y segregación racial, ya sea de manera explícita o implícita.
+No es un fenómeno novedoso que determinados partidos políticos recurran al tema de la inmigración como una estrategia para consolidar sus posiciones electorales (Bouza, 2002), lo cual conlleva el riesgo de intensificar sentimientos xenófobos en el país.
+Estos partidos aprovechan el descontento existente dentro de la población en relación al tema migratorio, utilizándolo como una herramienta para ganar apoyo y promover una retórica que fomenta la exclusión y la discriminación hacia los inmigrantes.
+En el cuarto nivel, conocido como racismo total, el fenómeno se extiende por toda la sociedad y llega a su punto máximo en el Estado.
+En esta etapa, el racismo se organiza en torno a una doctrina racista y se implementan programas basados en ella.
+El racismo impregna todos los aspectos de la vida colectiva, incluyendo el desarrollo económico, la diplomacia y las políticas científicas y educativas.  
+
+Además, se han identificado diferentes formas de racismo, como el racismo aversivo, simbólico y biológico, mencionados en diversos estudios como los de Cea D'Ancona (2004), Cea D'Ancona & Valles Martínez (2014), Buraschi y Godenau (2020), y Gualda et al. (2023). Estos son desglosados por ACNUR (2019). Asimismo, el racismo aversivo se caracteriza por ser una forma sutil de discriminación adoptada por individuos que proclaman oponerse al racismo y a actitudes racistas, pero que mantienen una distancia emocional, falta de empatía y actitudes frías hacia aquellos considerados diferentes.
+
+El racismo simbólico defiende la igualdad de derechos, pero con restricciones o condiciones específicas. Permite a los grupos étnicos vivir según sus preferencias culturales, pero solo en situaciones o áreas limitadas, lo que genera una segregación cultural y distancia entre los grupos.
+
+Por último, el racismo biológico representa la forma menos tolerante de racismo, sosteniendo la creencia de la superioridad biológica de una raza sobre las demás. Se considera a otras razas como una amenaza para la raza dominante y niega cualquier derecho a los individuos pertenecientes a esas razas, promoviendo incluso la exclusión total y la segregación física.
+
+No obstante, resulta imposible abordar el tema del racismo sin mencionar la xenofobia, ya que, según Bouza
+(2002), todo acto de racismo implica una forma de xenofobia, aunque no siempre ocurre lo contrario.
+Y resume la xenofobia en rechazo y/o discriminación dirigido hacia aquellos individuos que provienen de fuera del grupo de pertenencia.
+Así pues, la xenofobia es definida como:
+
+"Odio, repugnancia u hostilidad hacia los extranjeros. En el ámbito internacional no hay una definición aceptada de xenofobia aunque puede ser descrita como actitudes, prejuicios o conductas que rechazan, excluyen y, muchas veces, desprecian a otras personas, basados en la condición de extranjero o extraño a la identidad de la comunidad, de la sociedad o del país. Hay una relación muy estrecha entre racismo y xenofobia, términos difíciles de separar." (OIM, 2006, pp. 81).
+
+## Estudios previos
+
+Resulta, además, imprescindible resaltar la metodología de estudios anteriores realizados para conocer las variables sociodemográficas de los españoles en comparación con el racismo existente.
+Así pues, en la obra de Cea D'Ancona (2004) se hace evidente las variables que tienen significación a la hora de estudiar racismo, esto queda en evidencia al analizar los diferentes eurobarómetros y barómetros españoles desde los inicios hasta el 2004.
+En su obra hace un repaso por diferentes eurobarometros europeos, y las primeras investigaciones realizadas en España que tuvieron lugar en la década de los 90 por el Centro de Investigaciones Sociológicas (CIS).
+Asimismo, la primera investigación realizada en septiembre de 1990 (conocida como estudio n.º 1882), se llevó a cabo mediante entrevistas personales en los domicilios de los entrevistados elegidos mediante un diseño muestral aleatorio, con una muestra de 2.499 personas de ambos sexos y mayores de 18 años, sin embargo, se excluyeron las ciudades autónomas de España, Ceuta y Melilla.
+Y así es como nacen los estudios sobre inmigración y racismo.
+Para que en el año siguiente, se llevase a cabo el estudio de Inmigración y Racismo II (n.º 1964) con una muestra mucho más amplia de 17.687 personas de iguales características.
+
+### Factores sociales relevantes en las opiniones frente a la inmigración
+
+Las variables a estudiar en el contexto de la presente investigación, tras una exhaustiva revisión bibliográfica de diversos estudios con temáticas similares Cea D'Ancona (2004, 2005), Cea D'Ancona & Valles Martínez (2014), Fernández et al. (2017), Gualda et al. (2023) han demostrado ser de vital importancia para comprender y analizar las actitudes hacia los inmigrantes.
+Entre estas variables, se destacan la edad, el nivel de estudios, la situación socioeconómica personal, la ideología, situación laboral, clase social, tamaño de hábitat y la religión.
+
+1. La edad como factor determinante en la formación de actitudes, ha sido objeto de análisis en numerosas investigaciones. Se ha observado que las personas de mayor edad pueden mostrar resistencia o escepticismo hacia la inmigración debido a la preservación de la tradición y la percepción del cambio cultural.  
+
+2. El nivel de estudios y la cualificación son variables importantes en la comprensión de las actitudes hacia los inmigrantes. Los estudios previos han encontrado que aquellos con menor educación formal tienden a expresar mayor aversión hacia los inmigrantes, posiblemente debido a una menor exposición a diferentes culturas y una mayor percepción de amenaza económica. Por el contrario, la educación fomenta la comprensión y aceptación de la diversidad cultural.
+
+3. La situación socioeconómica personal juega un papel destacado en la formación de actitudes hacia los inmigrantes. Aquellos con una situación económica desfavorable tienden a mostrar mayor rechazo hacia la inmigración, debido a preocupaciones económicas y temores de pérdida de estatus.
+
+4. La situación laboral y las percepciones de competencia laboral influyen en las actitudes hacia los inmigrantes. La competencia por empleos disponibles puede generar resentimiento y hostilidad, especialmente durante crisis económicas. Existe la creencia común de que los inmigrantes aceptan salarios más bajos, lo que lleva a una disminución de los salarios.
+
+5. La clase social también influye en las actitudes hacia los inmigrantes. Las personas de clases sociales más altas tienden a tener actitudes más favorables debido a una mayor exposición a diferentes grupos sociales y recursos educativos y culturales.
+
+6. El tamaño del hábitat en el que se vive también afecta las actitudes hacia los inmigrantes. Las personas que viven en áreas urbanas y culturalmente diversas tienden a tener actitudes más tolerantes, mientras que aquellos en áreas rurales o comunidades homogéneas pueden mostrar actitudes menos abiertas.
+
+7. La religión desempeña un papel relevante en las actitudes hacia los inmigrantes. Aquellos con una afiliación religiosa tradicional y conservadora tienden a mostrar resistencia a la inmigración debido a creencias arraigadas o la preservación de identidades culturales específicas.
+
+8. La ideología política también influye en las actitudes hacia los inmigrantes. La derecha y la extrema derecha a menudo promueven discursos racistas y xenófobos. Por ejemplo, las medidas presentadas por VOX (2021) como "Cierre de los centros de MENAs que crean inseguridad en nuestras calles. Todos los menores extranjeros deber ser repatriados con sus padres a sus países de origen de forma inmediata." Es por ello que una ideología más cercana a la derecha y por ende, a partidos de derechas, legitima un discurso contra los inmigrantes.
+
+En específico, dentro de estas variables, se ha observado que los grupos sociales que presentan una mayor tendencia a mostrar una actitud más reacia hacia los inmigrantes son aquellos conformados por personas creyentes practicantes, amas de casa, con un nivel de estudios más bajo y una situación económica desfavorable (D'Ancona & Valles Martínez, 2014).
+Estas características pueden influir en la forma en que se percibe la inmigración, ya sea a través de la adhesión a valores tradicionales arraigados, la percepción de una competencia laboral más intensa o la preocupación por el mantenimiento de una identidad cultural específica.
+En conclusión, los hallazgos de estudios anteriores sugieren que las variables mencionadas desempeñan un papel importante en la configuración de las actitudes hacia los inmigrantes.
+La edad, el nivel de estudios, la ideología, la situación socioeconómica personal y la religión pueden ser determinantes en la formación de percepciones y opiniones sobre la inmigración.
+
+
+### Tipología de la población española según sus opiniones frente a la inmigración
+
+
+Haciendo un breve resumen de lo analizado en los diferentes estudios realizados por el CIS y lo analizado por Cea D'Ancona (2004), podemos categorizar a las personas en 3 grupos diferenciados por la actitud ante las minorías (datos basados en los barómetros de 1996, 2000, 2001 y 2002).
+
+1.  Por una parte estarían los tolerantes, que son favorables a la concesión de derechos sociales y ciudadanía, no les preocupa la convivencia o sociabilidad con inmigrantes extranjeros, su valoración de la inmigración es positiva y es el grupo favorable a suavizar la política migratoria; no comparten la imagen tópica negativa de la inmigración, creen que existe discriminación étnica, son contrarios a la existencia de partidos políticos de ideología racista o xenófoba, aceptan la presencia de inmigrantes, rechazan los actos de violencia contra inmigrantes y no temen el asentamiento de inmigrantes extranjeros.
+
+> En cuanto al perfil sociodemográfico, destacan los varones, jóvenes, con elevado nivel de estudios, ideología política de izquierdas, ubicados en la escala de ocupación laboral en los niveles más elevados, con un alto nivel de ingresos y de clase social alta o media-alta.
+
+2.  Por otra parte, los ambivalentes que manifiestan una actitud ambigua ante la inmigración. En 1996 no son muy partidarios de la concesión de derechos sociales y de ciudadanía, al contrario que en los años siguientes. Tampoco les preocupa la convivencia o sociabilidad con inmigrantes, hacia los que sienten una simpatía moderada, no son partidarios de una política de inmigración menos restrictiva, aunque en menor medida que los reacios, no creen que los inmigrantes estén discriminados, valoran negativamente a los partidos de ideología racista y xenófoba, no aceptan la presencia de inmigrantes y apenas conceden importancia a los actos de violencia contra inmigrantes.
+
+> Su perfil sociodemográfico se caracteriza por personas de edad avanzada, principalmente mujeres, con un nivel educativo muy bajo (primaria o menos), de ideología política de centro-derecha; ocupación laboral principal de escasa cualificación; bajo nivel de ingresos; auto-posición en la clase social baja; católico muy practicante; y residencia en municipios semiurbanos y urbanos de pequeño tamaño.
+
+3.  Por último, el perfil de los reacios que se declaran muy contrarios a la concesión de derechos sociales y de ciudadanía, les suscita bastante inquietud la posibilidad de convivir con inmigrantes hacia los cuales, apenas sienten simpatía; son los más contrarios a aminorar la política migratoria, tampoco son partidarios de acoger a refugiados políticos ni de regularizar a inmigrantes ilegales; opinan que las autoridades españolas, hasta el presente, apenas han controlado la estancia ilegal de extranjeros en España; creen que las leyes de inmigración son demasiado tolerantes, son partidarios de prohibir la entrada de trabajadores inmigrantes y consideran que son demasiadas las personas de otros países que viven actualmente en España; son los que más comparten la imagen tópica negativa de la in migración (bajan salarios, quitan trabajo e incrementan la delincuencia); rechazan que en España exista discriminación étnica hacia los inmigrantes. Además, en su opinión, las condiciones de vida de los inmigrantes en nuestro país son muy buenas o buenas; son los únicos que conceden una valoración positiva a los partidos de ideología racista o xenófoba, a su vez son los que menos aceptan la presencia de inmigrantes extranjeros en nuestro país; no conceden mucha importancia a los actos de violencia contra los inmigrantes y temen el asentamiento de los inmigrantes en nuestro país.
+
+> El perfil sociodemográfico es compuesto por varones, por una mayor representación de personas en edad adulta, con un nivel de estudios medio, de ideología política de derechas (más extrema en las encuestas de 1996 y 2000 que en las posteriores, más definidas por posiciones de centro-derecha); su ocupación laboral es de nivel intermedio; clase social media, con un nivel de ingresos declarado inferior a la media de los demás encuestados; católicos practicantes y residentes en municipios rurales y/o semi-urbanos.
+
+## Objetivos
+
+Tras realizar una revisión bibliográfica y estudiar detenidamente las variables relevantes, así como los perfiles con actitudes más discriminatorias o más inclusivas, se han establecido dos objetivos generales y tres objetivos específicos para abordar el segundo objetivo general de este estudio, que busca responder a la pregunta de investigación: "¿Qué factores sociales inciden en las actitudes de la población española frente a la inmigración?"
+
+1. El primer objetivo general es un objetivo de aprendizaje clave para mi futuro laboral centrado en el análisis de datos. Es por ello que se centra en adquirir un dominio sólido en el aprendizaje metodológico con R, con el fin de ampliar los conocimientos en análisis de datos, programación y visualización. 
+Esta meta se orienta hacia el desarrollo de habilidades y competencias necesarias para desempeñarse como especialista en ciencia de datos y analista de datos en un futuro profesional.  
+
+2. El segundo objetivo general se centra más en la investigación, y consiste en realizar un análisis exhaustivo de los factores sociales presentes en el Barómetro de junio de 2021 del CIS, que inciden en las actitudes de la población española frente a la inmigración.
+
+    2.1. En cuanto a los objetivos específicos del segundo objetivo, primero se busca profundizar en la comprensión de los aspectos sociodemográficos y sociales, como el sexo, la edad, el tamaño del municipio, la religión y el nivel de estudios, y su influencia en las actitudes de los españoles hacia la inmigración.  
+    
+    2.2. En cuanto al segundo objetivo específico, se busca identificar los factores socioeconómicos que influyen en las actitudes de los españoles hacia la inmigración. Se prestará especial atención a variables como la situación laboral, la ocupación, la clase social y la valoración económica, con el fin de comprender cómo estas variables socioeconómicas pueden moldear las actitudes de la población hacia la inmigración.
+
+    2.3. El tercer objetivo específico se enfoca en construir los perfiles y características sociodemográficas y sociales de aquellos individuos que mantienen actitudes tanto racistas y discriminatorias como inclusivas hacia la inmigración. Este objetivo tiene como propósito identificar patrones y características distintivas en diferentes grupos de opinión, a través del análisis de las variables estudiadas.
+
+En resumen, este estudio se propone abordar los factores sociales que inciden en las actitudes de la población española frente a la inmigración.
+Asimismo y mediante los objetivos generales y específicos establecidos, se busca adquirir conocimientos metodológicos en R, realizar un análisis en profundidad de los factores sociales presentes en el Barómetro del CIS y comprender los perfiles y características sociodemográficas y sociales relacionados con las actitudes hacia la inmigración.
+
+# Metodología
+
+En el presente estudio, se empleará una estrategia metodológica basada en el análisis de datos secundarios mediante encuesta. Esta metodología se basa en el análisis de información existente que ha sido previamente recolectada por fuentes confiables y relevantes.
+
+Este enfoque tiene ventajas significativas como la obtención de una amplia cantidad de información significativa, reduciendo costes y tiempos de recolección de información.
+Sin embargo, también presenta incovenientes como los sesgos inherentes de los datos secundarios como la fiabilidad de las respuestas o los propios sesgos que pueda cometer el entrevistador.
+
+## Importación de la base de datos
+
+En este contexto, se hace uso de la base de datos del Centro de Investigaciones Sociológicas (CIS), específicamente del barómetro correspondiente al mes de junio de 2021, identificado con el número de estudio 33261[^1].
+
+[^1]: Para más información consulte la página web y el respectivo estudio: <https://www.cis.es/cis/opencm/ES/1_encuestas/estudios/ver.jsp?estudio=14572>
+
+La elección de esta base de datos para llevar a cabo este estudio se debe a diversas razones que la hacen especialmente adecuada para responder a la pregunta de investigación planteada.
+En primer lugar, se pudo seleccionar dos variables dependientes, lo cual proporciona una mayor amplitud y profundidad al análisis de los datos.
+Además, la encuesta utilizada en esta base de datos cuenta con toda la información tanto social como sociodemográfica necesaria para abordar de manera exhaustiva el estudio por lo que es perfecta para responder a la pregunta de investigación sobre los factores sociales que inciden en las actitudes de la población española frente a la inmigración.
+Es importante destacar que, si bien existen otras encuestas del CIS que tratan sobre la inmigración explícitamente, estas son de carácter más antiguo, siendo la más reciente realizada en el año 2017.
+En contraste, los barómetros más cercanos en el tiempo no incluyen preguntas específicas sobre inmigración.
+Por lo tanto, esta base de datos se convierte en una valiosa fuente de información actualizada y relevante para abordar el tema de estudio.
+También hay que tener en cuenta que, dadas las limitaciones de mi conocimiento sobre la herramienta R, el manejo de una base de datos de mayor extensión y complejidad, como las encuestas a nivel europeo, resultaría más difícil de abordar.
+Por lo tanto, considerando tanto mis habilidades como los recursos disponibles, la base de datos del CIS se presenta como la opción idónea para llevar a cabo el presente estudio, ya que las bases de datos del CIS son de fácil acceso y descarga.
+
+Este proceso para el presente estudio se llevó a cabo de manera exhaustiva y rigurosa.
+Esta importación no solo implicó la descarga de la base de datos en formato CSV, sino también la obtención de los códigos correspondientes a cada pregunta, el cuestionario utilizado y la ficha técnica del estudio.
+
+En la mencionada ficha técnica del Barómetro del CIS (2021), se especifica que la muestra utilizada en el estudio fue de ámbito nacional, dirigida a la población española de ambos sexos mayores de 18 años.
+El diseño de la muestra se planteó con el objetivo de alcanzar un tamaño de muestra de 4000 personas, pero finalmente se realizaron 3814 entrevistas exitosas.
+Cabe destacar que la afijación de la muestra no fue proporcional, sino que se estableció un mínimo de 100 entrevistas por comunidad autónoma, excepto en las ciudades autónomas, donde se fijó un total de 20 entrevistas en cada una.
+Esta estrategia de afijación permitió garantizar la representatividad de las diferentes regiones y ciudades objeto de estudio.
+Además, se aplicaron coeficientes de ponderación (PESO) en el análisis de los datos obtenidos, con el propósito de ajustar la muestra a determinadas características demográficas o sociológicas relevantes.
+Estos coeficientes de ponderación se utilizaron para corregir posibles desviaciones en la distribución de las variables de interés y garantizar una estimación precisa de los parámetros poblacionales.
+En cuanto al procedimiento de recolección de datos, se llevó a cabo mediante la utilización de telefonía tanto fija como móvil.
+Esta estrategia permitió alcanzar a una amplia y diversa muestra de la población objetivo, asegurando la inclusión de diferentes perfiles sociodemográficos en el estudio.
+
+En conclusión, el proceso de importación de la base de datos del CIS (2021) para este estudio abarcó no solo la descarga de los datos en formato CSV, sino también la obtención de información complementaria relevante, como los códigos de preguntas, el cuestionario y la ficha técnica.
+
+## Conceptualización de R
+
+En cuanto al proceso de elaboración, como se ha mencionado en la introducción, el presente trabajo ha sido realizado íntegramente con el lenguaje de programación R y \LaTeX, en particular en RMarkdown, una herramienta integrada en R; y todo ello se ha llevado a cabo en Rstudio.
+Para ello resulta imprescindible definir de manera breve los elementos anteriores.
+
+Por una parte, R hace referencia a un lenguaje altamente versátil y completo que desempeña un papel fundamental en el almacenamiento y procesamiento de datos.
+También ofrece una amplia gama de utilidades que facilitan la manipulación, cálculo y análisis exhaustivo de datos, además de proporcionar las herramientas necesarias para la creación de representaciones gráficas precisas y visualmente atractivas (Chacón, 2021).
+
+No obstante, resulta imprescindible destacar que la potencia y capacidad de R trascienden ampliamente estas funcionalidades básicas, convirtiéndola en una herramienta de aplicación universal y una de las herramientas más populares y ampliamente utilizadas.
+Su flexibilidad, adaptabilidad y una comunidad activa y colaborativa permiten su implementación en diversos campos de estudio, dada la amplia gama de paquetes y algoritmos avanzados para el análisis estadístico, el aprendizaje automático y la visualización de datos.
+Además, se trata de una herramienta de libre acceso con una cantidad ingente de recursos y herramientas libres y gratuitas.
+Esto ha posicionado a R como una de las opciones preferidas para profesionales y académicos que desean realizar análisis complejos y sofisticados en proyectos de ciencia de datos.
+
+También se debe hablar de \LaTeX[^2], que es un sistema de preparación de documentos para composición de texto de alta calidad.
+Este es usado a menudo para escribir medianos a grandes documentos científicos y técnicos, pero puede usarse para casi cualquier tipo de publicación.
+(Morales Rivera, s.f.).
+
+[^2]: Para más información: <https://rpubs.com/Semilla_389/780506>.
+
+Asimismo, es importante destacar que la totalidad del presente estudio ha sido desarrollada utilizando RMarkdown[^3], una herramienta versátil y poderosa que se integra perfectamente en el entorno de programación R.
+La elección de RMarkdown se fundamenta en su capacidad para generar documentos de salida directamente en formato PDF, lo cual facilita la presentación y difusión de los resultados obtenidos.
+Además, ofrece una amplia gama de opciones gráficas personalizables y adaptables, lo que permite crear tablas dinámicas, funcionales y originales que enriquecen la visualización de los datos.
+
+[^3]: Para más información: <https://posit.co/wp-content/uploads/2022/10/rmarkdown-1.pdf>
+
+Esta decisión metodológica ha permitido superar las limitaciones asociadas a la escritura y edición manual de código, al proporcionar un enfoque más eficiente y automatizado para la generación de informes de investigación por la facilidad de incorporar directrices de formato de página como la letra, el espaciado o la creación del índice.
+La combinación de la potencia inherente al lenguaje de programación R con la capacidad de producir documentos interactivos y de alta calidad, posiciona a RMarkdown como una solución eficaz y polifacética para la elaboración de informes que cumplen con los estándares académicos más exigentes.
+La originalidad y la personalización de las visualizaciones generadas a través de RMarkdown contribuye a destacar la singularidad de este trabajo de investigación.
+
+Así pues, el dominio de R no ha sido el único requisito necesario para llevar a cabo esta investigación, ya que también ha sido necesario adquirir competencias en el manejo de RMarkdown.
+
+Además, todo el proceso se ha llevado a cabo en Rstudio[^4], un IDE (Integrated Development Environment, o Entorno de desarrollo integrado) (Chacón, 2021).
+RStudio, en su calidad de entorno de trabajo virtual, proporciona una interfaz de usuario que facilita las tareas de creación.
+
+[^4]: Para más información: <https://posit.co/wp-content/uploads/2022/10/rstudio-ide-1.pdf>
+
+En resumen, R es el lenguaje de programación que hemos utilizado para escribir nuestro código, RMarkdown nos ha permitido generar documentos con visualizaciones mejoradas, y RStudio ha sido el entorno de trabajo virtual en el que hemos llevado a cabo todo el proceso.
+Estas tres herramientas nos han proporcionado un conjunto completo y efectivo de recursos para realizar nuestro análisis de datos de manera exitosa.
+
+## Exploración y selección de variables
+
+Con el propósito de llevar a cabo una exhaustiva exploración y limpieza de los datos, se emprendió una fase inicial de análisis para comprender en detalle la estructura y el contenido de la base de datos en cuestión.
+Así pues, no fue necesario implementar ninguna acción de limpieza de datos, ya que se verificó la ausencia total de errores o valores faltantes en la base de datos objeto de estudio.
+Este descubrimiento resalta la sólida validez y la impecable calidad de los datos presentados en el presente trabajo académico.
+En el proceso de selección de variables, se creó una nueva base de datos a partir de la original, con un total de 12 variables, diferenciadas entre las dependientes e independientes.
+
+En lo que respecta a las variables dependientes, se optó por considerar detenidamente las preguntas 20 y 21 del cuestionario utilizado: "En términos generales, ¿cree Ud. que la inmigración es muy positiva, positiva, negativa o muy negativa para este país?" y "En su opinión, ¿el número de inmigrantes que hay actualmente en España es...?".
+Dichas variables fueron seleccionadas con el objetivo de evaluar de manera precisa la opinión de la población española en relación a la temática de la inmigración.
+
+Por otro lado, se procedió a la inclusión de 10 variables independientes de gran relevancia.
+En primer lugar, se consideró la variable del sexo, la cual se reconoce como una de las variables sociodemográficas fundamentales.
+Su inclusión se basa en la intención de examinar posibles diferencias entre hombres y mujeres en sus actitudes y percepciones hacia la inmigración y el racismo.
+En segundo lugar, se seleccionó la variable edad, con el fin de capturar la evolución de la sociedad y cómo las diferentes generaciones influyen en las percepciones y opiniones personales respecto a la inmigración.
+Además, se incorporaron otras variables que se mencionaron anteriormente y que guardan una estrecha relación con el racismo.
+Estas variables incluyen el tamaño del municipio, la religión, el nivel de estudios, la situación laboral y la ocupación, la ideología, la clase social, y con ello la valoración económica personal.
+
+```{r, echo=FALSE}
+
+# Crear un vector c con todas las etiquetas de las variables utilizadas
+
+etiquetas <- c("Grado de positividad de la inmigración en España", 
+               "Percepción del número de inmigrantes en España", 
+               "Sexo", 
+               "Edad", 
+               "Tamaño del municipio", 
+               "Religión", 
+               "Estudios", 
+               "Situación laboral",
+               "Ocupación",
+               "Escala ideológica",
+               "Clase social", 
+               "Valoración económica personal")
+
+# Crear un data frame con una única columna llamada "Etiquetas"
+tabla <- data.frame("Etiquetas" = etiquetas)
+
+
+# Con el paquete "knitr" y la función "kable" se crea una tabla del data frame que acabamos de crear, todo se alinea al centro (center). Y se le pone el título que se quiera con la función "caption".
+
+knitr::kable(tabla, align = "c", caption = "Etiquetas de las variables del estudio") 
+```
+
+Cada una de estas variables seleccionadas aporta una dimensión adicional al análisis, permitiendo una comprensión más completa y profunda de las actitudes y percepciones de la población española en relación con la inmigración y el racismo.
+
+## Recodificación de variables
+
+Durante el proceso de recodificación de variables, se realizaron modificaciones y ajustes necesarios con el fin de mejorar la calidad y coherencia de los datos, los cuales se detallan en los anexos[^6] adjuntos.
+A continuación, se detallan las acciones realizadas en cada una de las variables seleccionadas:
+
+En la variable "Valoración de inmigrantes", se garantizó que la etiqueta "Ni negativa ni positiva" no se encontrara en la última posición, sino en el medio.
+
+[^6]: Veáse en el documento de anexos, apartado 1.1., página 1.
+
+En cuanto a la variable "Edad", se procedió a la agrupación de las edades en cuatro categorías distintas.
+Esta clasificación permitió observar de manera más clara la evolución de la opinión respecto a la inmigración en diferentes grupos generacionales: población joven (18-29 años), población adulta de mediana edad (30-49 años), población adulta madura (50-64 años) y población de edad avanzada (65+).
+
+En la variable "Religión", se realizaron cambios en las etiquetas para mejorar la claridad y la precisión de las respuestas.
+Específicamente, se modificaron las etiquetas "Ateo/a (niegan la existencia de Dios)" a "Ateo/a" y "Agnóstico/a (no niegan la existencia de Dios pero tampoco la descartan)" a "Agnóstico/a", eliminando así la información entre paréntesis.
+
+En la variable "Estudios", se procedió a la eliminación de la categoría "Otros", ya que dada la exhaustividad de las demás etiquetas no se encontraron datos correspondientes a esa categoría en el conjunto de datos analizado.
+
+En relación a la variable "Situación laboral", se llevó a cabo una recodificación para agrupar de manera adecuada las diferentes categorías.
+Los jubilados que han trabajado antes y los que no lo han hecho, fueron agrupados en una única categoría.
+De manera similar, aquellos que se encuentran en paro y han trabajado antes y los que están en paro porque buscan su primer empleo también fueron agrupados en una sola categoría.
+
+En la variable "Escala ideológica", se realizó una reorganización de las etiquetas para mejorar la coherencia y la comprensión de las respuestas.
+Específicamente, se ajustó el orden de las etiquetas de manera que las etiquetas fueran del 1 al 10.
+
+En la variable "Clase social", se realizó una agrupación de las categorías "Clase alta" y "Clase media-alta" debido a su bajo porcentaje.
+A su vez, "Clase trabajadora, proletariado y obrera" se agrupó en la categoría más amplia de "Clase media-baja".
+Y por último, la categoría "Clase baja/pobre" fue recodificada como "Clase baja".
+
+Por último, en la variable "Valoración económica personal", se procedió a un cambio en el nombre de la etiqueta "Regular (NO LEER)" a simplemente "Regular".
+Eliminando así la frase "NO LEER", lo cual contribuyó a una presentación más clara.
+
+En resumen, las acciones de recodificación llevadas a cabo en estas variables contribuyeron a mejorar la calidad y la consistencia de los datos utilizados en el presente estudio, asegurando así la validez y la confiabilidad de los resultados obtenidos.
+
+## Técnicas de análisis
+
+Con el fin de analizar las variables en estudio, se ha realizado un análisis univariante que consiste en la creación de tablas de frecuencias. Estas tablas proporcionaron información detallada sobre la distribución y características de cada variable. Se incluyeron el nombre de cada etiqueta, la frecuencia absoluta y el porcentaje relativo al total de observaciones. Además, para las variables numéricas, se realizaron análisis de medidas de centralización y dispersión para resumir y describir la distribución de los datos.
+
+Las medidas de centralización nos permiten identificar el valor típico o central alrededor del cual se agrupan los datos.
+Entre las medidas más comunes se encuentran la media y la mediana.
+La media se calcula como la suma de todos los valores dividida por el número total de observaciones.
+Además, representa el valor central que equitativamente distribuye la totalidad de los datos.
+Con respecto a la mediana es el valor que divide los datos en dos partes iguales, de manera que el 50% de las observaciones se encuentran por encima y el otro 50% se encuentran por debajo de este valor.
+
+Por otro lado, las medidas de dispersión nos indican la variabilidad o extensión en la que los datos se encuentran dispersos y por lo tanto, están ligados y alrededor de las medidas centrales.
+Las medidas de dispersión nos proporcionan información sobre la homogeneidad o heterogeneidad de los datos.
+Entre las medidas más importantes, tenemos la varianza, o en este caso, se utilizará la desviación típica, que es la raíz cuadrada positiva de la varianza y como su nombre lo indica, nos muestra cuánto se desvían los valores individuales del valor central, como la media, siempre y cuando se hable de las mismas unidades de análisis.
+Una desviación típica alta implica una mayor dispersión de los datos, mientras que una desviación estándar baja sugiere que los datos están más agrupados alrededor de la media.
+Por lo tanto, la varianza y la desviación típica son medidas complementarias para obtener información sobre la dispersión de los datos.
+
+Otra medida de dispersión relevante son los cuartiles, que dividen el conjunto de datos en cuatro partes iguales.
+El primer cuartil (Q1) es el valor por debajo del cual se encuentra el 25% de las observaciones, el segundo cuartil corresponde a la mediana (Q2), ya que como hemos hablado, divide la muestra en dos partes iguales; y el tercer cuartil (Q3) es el valor por debajo del cual se encuentra el 75% de las observaciones.
+Estos cuartiles nos brindan una comprensión más completa de la distribución y dispersión de los datos, y como se ha mencionado anteriormente están ligados a la mediana.
+
+Otra medida importante es el rango, que representa la diferencia entre el valor mínimo y el valor máximo de los datos, lo que nos brinda una visión más amplia de la distribución de los datos.
+
+En resumen, el análisis de las medidas de centralización y dispersión nos brinda una visión completa de los datos, profundizando en la distribución de los datos y facilitando la comprensión de su tendencia central, variabilidad y distribución.
+Estas medidas, son herramientas esenciales en el análisis descriptivo de los datos numéricos.
+
+Además del análisis univariante, se ha llevado a cabo un análisis bivariante que involucra la construcción de tablas cruzadas para examinar y verificar posibles relaciones de dependencia entre las variables estudiadas.
+En este sentido, se ha utilizado el estadístico Chi-cuadrado ($\chi^{2}$), una medida estadística ampliamente reconocida para el estudio de la independencia entre variables.
+El objetivo principal del análisis es determinar si existe una relación significativa entre las variables cruzadas, asumiendo la hipótesis nula ($H_{0}$) de independencia, donde las frecuencias esperadas se calculan bajo la suposición de que las variables son independientes y siguen la misma distribución marginal.
+Una vez obtenido el estadístico $\chi^{2}$, y habiendo establecido previamente un $\alpha$ o nivel de significación de 0.05, se evaluó el p-valor.
+Esta medida indica la probabilidad de haber obtenido el resultado observado, asumiendo que la hipótesis nula ($H_{0}$) es verdadera.
+Es el nivel crítico mínimo al cual rechazamos la hipótesis nula, y se calcula utilizando los datos de la muestra.
+Es decir, un p-valor menor que 0.05 indica una relación significativa entre las variables, lo que sugiere que la independencia no se cumple y que existe una asociación entre ellas.
+En cambio, un p-valor mayor que 0.05 implica que no hay evidencia suficiente para rechazar la hipótesis nula de independencia entre las variables.
+
+Además del análisis de significación con el $\chi^{2}$, para examinar la fuerza de relación de dependencia entre las variables nominales se utilizaron medidas estadísticas como la V de Cramer y el Coeficiente de Contingencia.
+
+Por un lado, la V de Cramer es una medida que varía entre 0 y 1, donde los valores cercanos a 0 indican una baja asociación entre las variables, mientras que los valores cercanos a 1 indican una fuerte asociación.
+Por otro lado, el Coeficiente de Contingencia es otra medida que oscila entre 0 y 1.
+Al igual que la V de Cramer, los valores cercanos a 0 indican una asociación débil entre las variables, mientras que los valores cercanos a 1 señalan una asociación fuerte.
+Sin embargo, a diferencia de la V de Cramer, el Coeficiente de Contingencia tiene en cuenta el tamaño total de la muestra.
+
+En el análisis de las variables ordinales, se ha empleado el coeficiente de asociación D de Somers y el coeficiente de Gamma de Goodman y Kruskal.
+Estas medidas no solo evalúan la presencia de asociación entre dos variables, sino también la intensidad de dicha asociación.
+Ambos coeficientes varían en un rango de -1 a 1, donde valores más cercanos a los extremos indican una asociación más fuerte.
+Por el contrario, valores próximos a 0 reflejan un nivel más bajo de asociación.
+Además, cuando el valor es positivo, denota una asociación directa. Por otro lado, cuando el valor es negativo, denota una asociación inversa, lo que implica una relación entre las variables pero en sentido opuesto.
+Estas medidas son de gran utilidad para comprender la naturaleza y dirección de la relación entre variables ordinales en un contexto de análisis más riguroso.
+
+Estas medidas estadísticas proporcionan información adicional sobre la fuerza y la naturaleza de la relación entre las variables.
+Al combinar el análisis del Chi-cuadrado con las medidas para variables tanto nominales como ordinales, se obtiene una visión más completa de la asociación entre las variables estudiadas, brindando una mayor comprensión de la dependencia entre las variables del estudio.
+Asimismo, estas medidas han permitido obtener una evaluación cuantitativa y objetiva de la relación existente entre las variables en estudio, brindando así una base sólida para la interpretación de los resultados.
+Mediante el análisis bivariante y la aplicación de estas medidas, se ha logrado obtener información relevante sobre la dependencia entre las variables independientes y las variables dependientes, lo cual ha sido imprescindible para responder a la pregunta de investigación y a los objetivos, contribuyendo así a una comprensión más profunda de los fenómenos analizados en este estudio.
+
+## Análisis descriptivo de las variables
+
+En el presente apartado, se llevará a cabo un análisis descriptivo general de las variables clave abordadas en este estudio.
+Con el objetivo de brindar una visión clara y concisa de los resultados obtenidos, se presentarán tablas de frecuencias en los anexos[^7] adjuntos.
+Estas tablas proporcionan una descripción detallada de la distribución de las respuestas de los participantes en relación con cada variable estudiada.
+Además, señalar que las etiquetas "No sabe", "No contesta" se tendrán en cuenta en todo momento para la comparación y el análisis de las mismas.
+El análisis descriptivo de las variables constituye una etapa fundamental en el proceso de investigación, ya que sienta las bases para un análisis más profundo y una interpretación precisa de los resultados.
+A través de la presentación de tablas de frecuencias en los anexos, se busca ofrecer una representación visual clara y completa de los datos, enriqueciendo así el análisis y la comprensión de los hallazgos.
+
+[^7]: Veáse el documento de anexos, apartado 2, página 17.
+
+Por un lado y como se explicó anteriormente, se han analizado dos variables dependientes en este estudio: el grado de positividad hacia la inmigración en España y el número de inmigrantes actualmente en el país.
+En cuanto a la distribución de la primera variable, los datos revelan una diversidad de opiniones, abarcando desde valoraciones muy positivas hasta muy negativas.
+Un total de 170 participantes, que representan un 4.46% del total, expresaron una valoración "Muy positiva".
+Por otro lado, 1949 personas, que constituyen el 51.10% de la muestra, manifestaron una actitud "Positiva", lo que indica que más de la mitad de los participantes tiene una visión favorable hacia la inmigración en España.
+Por otro lado, 819 participantes, el 21.47% tuvieron una percepción "Negativa", mientras que más del 5% la consideró "Muy negativa".
+Además, 443 respuestas con un 11.62%, reflejaron una posición neutral, sin inclinarse hacia la positividad o la negatividad.
+En resumen, los resultados muestran una opinión generalmente positiva hacia la inmigración, aunque aproximadamente una cuarta parte de la muestra tiene una perspectiva negativa al respecto.
+
+En relación a la segunda variable dependiente, un 4.75% de los participantes, equivalente a 181 individuos, consideraron que el número de inmigrantes en España es "Insuficiente".
+Por otro lado, la categoría con mayor representación fue la de "Aceptable", con 1573 participantes y un 41.24% del total de la muestra.
+Sin embargo, 861 participantes, es decir un 22.57% expresaron que el número de inmigrantes es "Elevado", mientras que 759 participantes, cerca del 20%, lo consideraron "Excesivo".
+Estos resultados indican que aunque una parte significativa de la muestra ve el número de inmigrantes como aceptable y beneficioso, más del 40% de los participantes tiene una visión negativa al respecto.
+Además, se identificaron 392 respuestas, un 10.28%, en las que los participantes indicaron "N.S." (no sabe), lo que refleja la presencia de un porcentaje considerable de participantes desinformados o que optaron por no responder debido a la naturaleza delicada del tema.
+En resumen, los hallazgos revelan una variedad de opiniones en cuanto a la actitud hacia la inmigración y el número de inmigrantes en España.
+Aunque la mayoría de los participantes muestra una actitud positiva y considera el número de inmigrantes como aceptable, existe una proporción significativa de participantes con una visión negativa sobre estos aspectos.
+
+Por otro lado, entre las variables independientes, podemos destacar la ausencia de otro género que no sea ni hombre ni mujer, y también su distribución equitativa entre ambos sexos.
+
+En cuanto a la edad, el grupo de 18 a 29 años, con la menor distribución con un 13.24%, frente a los 33.46% del grupo más representado, siendo las personas de 30 a 49 años.
+
+En relación a la escala ideológica, destaca una muestra de izquierdas, representando aproximadamente el 40% del total, en contraste con el 25% aproximado tanto de la derecha como del centro político. A su vez, cabe destacar que la mediana de la escala ideológica se sitúa en el valor 5, lo cual indica una distribución relativamente equilibrada de las respuestas en el espectro político, que se ve respaldado por el rango intercuartílico de 3. Por otro lado, la media se sitúa en 4.70. No obstante, es importante tener en cuenta la desviación típica de 2.25, la cual refleja una cierta dispersión en las respuestas y señala la presencia de variabilidad en las posiciones ideológicas de los participantes.
+
+En la variable "nivel de estudios" las personas sin estudios están infrarrepresentadas con tan sólo un 2%, mientras que los estratos rondan el 15% y los estudios universitarios se muestra como la mayor muestra con casi un 40%.
+
+Teniendo en cuenta la religión, los católicos tanto practicantes como no practicantes son los mas representados con casi un 60% frente a los agnósticos o indiferentes que rondan el 10%.
+Con un mayor porcentaje del 16% se encuentran los ateos.
+Y como menor porcentaje, los creyentes de otras religiones, lo cual puede atribuirse a la baja presencia de personas con diferentes nacionalidades y, por consiguiente, creencias religiosas distintas.
+
+En la variable "situación laboral" destacan las personas empleadas con más del 50%, por otra parte, se registran estudiantes con baja representación, conformando un 4.64% de la muestra y se destaca la poca presencia de personas involucradas en el trabajo doméstico no remunerado, representada con un 4.48%.
+
+
+En cuanto a la clase social, la clase alta y media alta está representada con tan solo un 6.24%, y destaca la clase media-media con un 50%. Este desequilibrio en la representación de los estratos puede afectar la precisión y confiabilidad de los resultados, ya que se corre el riesgo de obtener conclusiones sesgadas o poco representativas de la realidad.
+Por lo tanto, es fundamental tener en cuenta este aspecto al interpretar los hallazgos del análisis descriptivo y considerar posibles limitaciones o sesgos asociados.
+Aún así, es importante destacar que la identificación de discrepancias en las frecuencias y porcentajes no implica automáticamente la existencia de un problema de representatividad.
+Sin embargo, es un factor que debe ser abordado y analizado cuidadosamente, evaluando las posibles implicaciones en la interpretación de los resultados y considerando estrategias adecuadas para mitigar cualquier sesgo potencial.
+
+# Análisis y resultados
+
+## Análisis cruzado de las variables dependientes e independientes
+
+El análisis bivariante se ha realizado utilizando los porcentajes por fila, lo que permite examinar las respuestas considerando las variables independientes en relación a la variable dependiente.
+De este modo, se nos brinda una perspectiva más clara y descriptiva de las respuestas en función de las variables independientes, lo que facilita la identificación de patrones, tendencias y diferencias significativas.
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+library(kableExtra)
+library(tidyverse)
+
+var = "SEXO"
+
+crea_tabla <- function(d, var) {
+    temp1 <- xtabs(~ d[[var]] + d$GRADOPOSITIVIDADINMI2, d)
+    
+    # Creación de otra tabla, pero teniendo en cuenta los porcentajes de filas 
+    tabla_cruzada_porcentajes <- prop.table(temp1, 1) * 100
+    
+    # Se redondean los porcentajes a dos decimales 
+    g1 <- round(tabla_cruzada_porcentajes, 2)
+}
+
+ttg <- rbind(crea_tabla(d, var = "SEXO"),
+            crea_tabla(d, var = "edad_r"),
+            crea_tabla(d, var = "TAMUNI"),
+            crea_tabla(d, var = "RELIGION"),
+            crea_tabla(d, var = "ESCIDEOL"),
+            crea_tabla(d, var = "ESTUDIOS"),
+            crea_tabla(d, var = "SITLAB_3"),
+            crea_tabla(d, var = "OCUP2"),
+            crea_tabla(d, var = "CLASESUB"),
+            crea_tabla(d, var = "VALOR_PERS")
+)
+
+
+
+
+kbl(ttg[], align = "c", caption = "Grado positividad frente a inmigración en España",
+    longtable=TRUE) %>%
+    kable_paper("striped", full_width = F) %>%
+    pack_rows("Sexo", 1, 2) %>%
+    pack_rows("Edad", 3, 6) %>%
+    pack_rows("Tamaño de municipio", 7, 13) %>% 
+    pack_rows("Religión", 14, 20) %>%
+    pack_rows("Escala ideológica", 21, 32) %>%
+    pack_rows("Estudios", 33, 39) %>% 
+    pack_rows("Situación laboral", 40, 46) %>% 
+    pack_rows("Ocupación", 47, 58) %>% 
+    pack_rows("Clase social", 59, 65) %>%
+    pack_rows("Valoración de la economía personal", 66, 72)
+
+```
+
+
+Se observa que los hombres, en general, presentan una actitud más positiva hacia la inmigración en comparación con las mujeres.
+Esta diferencia se evidencia en los porcentajes más altos en las categorías "Muy positiva" y "Positiva", con una brecha de casi el 10% en comparación con las mujeres.
+Por lo tanto, las mujeres muestran una concepción más desfavorable de la inmigración.
+Sin embargo, en la categoría "Muy negativa", los porcentajes son similares, con un 5.36% para los hombres y un 5.70% para las mujeres.
+Además, se observa que las mujeres son más reticentes a responder en relación a este tema.
+
+En cuanto a las diferencias según la edad, el grupo de edad de 18 a 29 años muestra una valoración más positiva hacia la inmigración en comparación con los otros grupos.
+A medida que aumenta la edad, se observa un incremento en las valoraciones negativas y muy negativas, siendo los grupos de 50 a 64 años y de 65 años o más los más críticos respecto a la inmigración.
+
+En relación al tamaño de municipio, se observa que los municipios más grandes muestran una valoración más positiva en comparación con aquellos con una población de 50.001 a 100.000 habitantes, los cuales presentan una concepción menos favorable.
+Asimismo, los lugares con menos habitantes exhiben una valoración negativa más pronunciada.
+
+En general, se encuentran diferencias significativas en las valoraciones hacia la inmigración en función de la religión.
+Los ateos y agnósticos tienden a tener una valoración positiva más elevada, mientras que los católicos practicantes muestran una valoración negativa más pronunciada.
+
+En cuanto a las escalas ideológicas, se observa que las de izquierda presentan una mayor valoración positiva de la inmigración, mientras que las de derecha muestran una mayor valoración negativa.
+
+En relación a los niveles de estudios, se aprecia que los niveles superiores están asociados a una mayor valoración positiva.
+Además, las personas con menos estudios tienen una valoración más negativa, a excepción de aquellas sin estudios, quienes presentan el mayor porcentaje de respuestas de "No sabe".
+
+En cuanto a la situación laboral, se observa que los estudiantes y las personas trabajadoras tienen una valoración más positiva.
+Por otro lado, el grupo de trabajo doméstico no remunerado muestra una valoración más negativa y un mayor porcentaje de respuestas de "No sabe", al igual que los jubilados/as y pensionistas.
+
+En relación a la ocupación, se observa que aquellas personas con ocupaciones más especializadas y cualificadas tienden a tener una valoración más positiva de la inmigración.
+Por otro lado, las ocupaciones no cualificadas presentan una valoración más negativa y un mayor porcentaje de respuestas de "No sabe".
+
+En cuanto a la valoración de la economía personal, se observa que aquellos que perciben una mejor situación económica tienen una valoración más positiva de la inmigración, mientras que aquellos que perciben una situación económica desfavorable tienen una concepción más negativa.
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+var = "SEXO"
+crea_tabla <- function(d, var) {
+        temp1 <- xtabs(~ d[[var]] + d$PERCEPIONUMEROINMIGR, d)
+        
+        # Creación de otra tabla, pero teniendo en cuenta los porcentajes de filas 
+        tabla_cruzada_porcentajes <- prop.table(temp1, 1) * 100
+        
+        # Se redondean los porcentajes a dos decimales 
+        g1 <- round(tabla_cruzada_porcentajes, 2)
+}
+    
+    
+tt <- rbind(crea_tabla(d, var = "SEXO"),
+                crea_tabla(d, var = "edad_r"),
+                crea_tabla(d, var = "TAMUNI"),
+                crea_tabla(d, var = "RELIGION"),
+                crea_tabla(d, var = "ESCIDEOL"),
+                crea_tabla(d, var = "ESTUDIOS"),
+                crea_tabla(d, var = "SITLAB_3"),
+                crea_tabla(d, var = "OCUP2"),
+                crea_tabla(d, var = "CLASESUB"),
+                crea_tabla(d, var = "VALOR_PERS")
+)
+    
+    
+kbl(tt[], align = "c", caption = "Percepción del número de inmigrantes en España",
+    longtable=TRUE) %>%
+        kable_paper("striped", full_width = F) %>%
+        pack_rows("Sexo", 1, 2) %>%
+        pack_rows("Edad", 3, 6) %>%
+        pack_rows("Tamaño de municipio", 7, 13) %>% 
+        pack_rows("Religión", 14, 20) %>%
+        pack_rows("Escala ideológica", 21, 32) %>%
+        pack_rows("Estudios", 33, 39) %>% 
+        pack_rows("Situación laboral", 40, 46) %>% 
+        pack_rows("Ocupación", 47, 58) %>% 
+        pack_rows("Clase social", 59, 65) %>%
+        pack_rows("Valoración de la economía personal", 66, 72)
+   
+
+```
+
+En consonancia con lo expuesto anteriormente, los hallazgos de la tabla cruzada reflejan un patrón similar para la segunda variable dependiente.
+Sin embargo, es importante destacar que, en el caso del sexo, se observa una diferencia más pronunciada entre hombres y mujeres, evidenciando que las mujeres presentan una mayor propensión a manifestar actitudes racistas en relación a la percepción de la inmigración en España.
+
+
+## Analisis del Chi-cuadrado
+
+Continuando con el análisis, se lleva a cabo un estudio utilizando el test del chi-cuadrado y diferentes medidas de asociación para comprobar la significación de las variables. En el caso de las variables nominales, se examina la V de Cramer, indicada en las tablas como "V", junto con el coeficiente de contingencia, representado como "C". Por otro lado, para las variables ordinales, se emplean las medidas de D de Somers y el coeficiente Gamma de Goodman y Kruskal. Estas medidas se representan en la tabla mediante la letra "D" y el símbolo Gamma ($\gamma$), respectivamente.
+
+\begin{table}[H]
+
+    \begin{center}
+        \caption{Tabla del Chi-cuadrado y medidas de asociacón de la variable dependiente 1}
+        \begin{tabular}{ |c|c|c|c| }
+            \hline
+            Var. Dependiente & Var. Independientes & Chi-cuadrado ($\chi^{2}$) & Medidas de Asociación  \\
+            \hline
+            \multirow{20}{3cm} {Grado de positividad hacia la inmigración} & \multirow{2}{*}{Sexo} & \multirow{2}{*}{70.411 [p = 0]} &  V = 0.136 \\
+            & & &  C = 0.135 \\
+            & \multirow{2}{*}{Edad} & \multirow{2}{*}{112.28 [p = 0]} &  D = 0.13 \\
+            & & &  $\gamma$ = 0.179 \\
+            & \multirow{2}{*}{Tamaño de municipio} & \multirow{2}{*}{53.569 [p = 0.03]} & D = -0.043 \\
+            & & &  $\gamma$ = -0.053 \\
+            & \multirow{2}{*}{Religión} & \multirow{2}{*}{405.84 [p = 0]} &  V = 0.133 \\
+            & & &  C = 0.31 \\
+            & \multirow{2}{*}{Escala ideológica} & \multirow{2}{*}{781.91 [p = 0]} &  D = 0.318 \\
+            & & &  $\gamma$ = 0.363 \\
+            & \multirow{2}{*}{Nivel de estudios} & \multirow{2}{*}{301.84 [p = 0]} & D = -0.204 \\
+            & & &  $\gamma$ = -0.264 \\
+            & \multirow{2}{*}{Situación laboral} & \multirow{2}{*}{173.84 [p = 0]} &  V = 0.087 \\
+            & & &  C = 0.209 \\
+            & \multirow{2}{*}{Ocupación} & \multirow{2}{*}{105.27 [p = 0.002]} &  V = 0.094 \\
+            & & &  C = 0.224 \\
+            & \multirow{2}{*}{Clase social} & \multirow{2}{*}{167.14 [p = 0]} &  D = 0.093 \\
+            & & &  $\gamma$ = 0.135 \\
+            & \multirow{2}{*}{Valoración de la economía personal} & \multirow{2}{*}{206.58 [p = 0]} &  D = 0.129 \\
+            & & &  $\gamma$ = 0.198 \\
+            \hline
+        \end{tabular}
+    \end{center}
+
+\end{table}
+
+
+
+
+\begin{table}[H]
+
+    \begin{center}
+        \caption{Tabla del Chi-cuadrado y medidas de asociacón de la variable dependiente 2}
+        \begin{tabular}{ |c|c|c|c| }
+            \hline
+            Var. Dependiente & Var. Independientes & Chi-cuadrado ($\chi^{2}$) & Medidas de Asociación  \\
+            \hline
+            \multirow{20}{4cm}{Percepción del número de inmigrantes en España} & \multirow{2}{*}{Sexo} & \multirow{2}{*}{91.845 [p = 0]} &  V = 0.155 \\
+            & & &  C = 0.153 \\
+            & \multirow{2}{*}{Edad} & \multirow{2}{*}{152.44 [p = 0]} &  D = 0.132 \\
+            & & &  $\gamma$ = 0.181 \\
+            & \multirow{2}{*}{Tamaño de municipio} & \multirow{2}{*}{43.909 [p = 0.049]} & D = -0.054 \\
+            & & &  $\gamma$ = -0.0657 \\
+            & \multirow{2}{*}{Religión} & \multirow{2}{*}{467.5 [p = 0]} &  V = 0.157 \\
+            & & &  C = 0.33 \\
+            & \multirow{2}{*}{Escala ideológica} & \multirow{2}{*}{712.94 [p = 0]} &  D = 0.284 \\
+            & & &  $\gamma$ = 0.324 \\
+            & \multirow{2}{*}{Nivel de estudios} & \multirow{2}{*}{289.86 [p = 0]} & D = -0.188 \\
+            & & &  $\gamma$ = -0.245 \\
+            & \multirow{2}{*}{Situación laboral} & \multirow{2}{*}{11.95 [p = 0]} &  V = 0.1 \\
+            & & &  C = 0.219 \\
+            & \multirow{2}{*}{Ocupación} & \multirow{2}{*}{109.36 [p = 0]} &  V = 0.105 \\
+            & & &  C = 0.228 \\
+            & \multirow{2}{*}{Clase social} & \multirow{2}{*}{169.85 [p = 0]} &  D = 0.094 \\
+            & & &  $\gamma$ = 0.138 \\
+            & \multirow{2}{*}{Valoración de la economía personal} & \multirow{2}{*}{201.23 [p = 0]} &  D = 0.125 \\
+            & & &  $\gamma$ = 0.194 \\
+            \hline
+        \end{tabular}
+    \end{center}
+
+\end{table}
+
+
+
+Tras el análisis de las tablas, se observa que todas las variables analizadas son estadísticamente significativas con valores similares para las dos variables dependientes.
+
+
+Entre las variables nominales, como el sexo, comunidad autónoma, religión, ocupación y situación laboral, se observa en general una asociación baja con las variables dependientes, ya que la mayoría de los coeficientes de asociación se encuentran en el rango de 0 a 0.2. En particular, la variable religión muestra coeficientes de contingencia más altos, alcanzando valores de 0.3.
+Sin embargo, al utilizar el coeficiente de correlación de Cramer, se obtienen valores de 0.133 y 0.157 para las dos variables dependientes respectivamente.
+Estos resultados sugieren una asociación moderada entre la religión y las actitudes hacia la inmigración.
+
+En cuanto a las variables ordinales, como la edad, tamaño de municipio, escala ideológica, nivel educativo, valoración económica personal y clase social, también se observa una asociación baja en general, con coeficientes de asociación que oscilan entre 0 y 0.2.
+Sin embargo, se destaca la escala ideológica como la variable con mayor fuerza de asociación, con un valor de 0.318 y 0.284 con la D de Somers y 0.363 y 0.324 con Gamma de Goodman y Kruskal para ambas variables respectivamente. Cabe mencionar que todas las asociaciones encontradas son positivas, excepto en el caso de la variable nivel educativo, que muestra una asociación negativa con valores en el rango de 0.2.
+
+
+Por otro lado, es importante señalar que las variables sociodemográficas y socioeconómicas estudiadas tanto en esta investigación como en otros estudios (Fernández et al., 2017; Gualda et al., 2023; Cea D'Ancona y Valles Martínez, 2014) han revelado asociaciones significativas con las actitudes hacia la inmigración. No obstante, es necesario destacar que, en general, estas asociaciones tienden a ser de magnitud baja. 
+
+# Conclusiones
+
+En resumen, este estudio ha abordado el análisis de los factores sociales que influyen en las actitudes de la población española hacia la inmigración.
+Mediante el uso de herramientas como R, Rmarkdown, \LaTeX y Rstudio, hemos obtenido resultados y hallazgos que proporcionan una visión más profunda y significativa sobre el racismo en la sociedad española.
+
+En relación a los objetivos planteados, se ha logrado satisfactoriamente el primer objetivo de adquirir un dominio sólido en el uso de R y otras herramientas complementarias, lo que ha permitido realizar un análisis estadístico fundamental para estudios sociológicos cuantitativos.
+A pesar de los desafíos encontrados, este trabajo se destaca como una guía útil tanto para mi desarrollo profesional como para otros interesados en investigaciones similares.
+
+En cuanto al segundo objetivo, a través del análisis univariante y bivariante, se ha llevado a cabo un estudio de los factores sociales presentes en el Barómetro de junio de 2021 del CIS, que influyen en las actitudes de la población española hacia la inmigración.
+
+Al profundizar en aspectos sociodemográficos y sociales como el sexo, la edad, el tamaño del municipio, la religión, el nivel de estudios y la escala ideológica, se han identificado relaciones significativas.
+Aunque los valores de las relaciones son relativamente bajos, oscilando entre 0 y 0.3, se han observado patrones generales que permiten distinguir entre actitudes más o menos racistas, aunque en ocasiones también se presentan contradicciones en los estratos analizados.
+
+Se ha observado que las variables presentan en su mayoría una relación positiva entre sí. Sin embargo, se destaca una excepción en el caso del nivel de estudios, donde se ha evidenciado que las personas con educación superior tienden a ser más tolerantes. Este fenómeno puede atribuirse a un mayor nivel de conocimiento, lo que conlleva a una mayor aceptación de la diversidad. Además, se han identificado diferencias significativas de género, donde los hombres muestran actitudes más tolerantes, mientras que las mujeres presentan actitudes más racistas.
+
+En cuanto a la edad, las personas de mayor edad tienden a valorar de forma menos favorable la inmigración, posiblemente debido a su inclinación hacia la preservación de tradiciones.
+
+El tamaño del municipio ha demostrado tener una relación generalmente positiva. Esto podría explicarse por el hecho de que a medida que aumenta el número de personas, también aumenta la diversidad. Estudios previos (Fernández et al., 2017; Gualda et al., 2023; Cea D'Ancona y Valles Martínez, 2014) respaldan la idea de que aquellos individuos que han tenido contacto con personas inmigrantes tienden a mostrar una actitud más tolerante.
+
+Por otro lado, se ha observado que la variable religión presenta una significación destacada, ya que las personas católicas (tanto practicantes como no practicantes) muestran actitudes más reacias hacia la inmigración.
+
+La escala ideológica también ha revelado una significación destacada, donde las personas de ideología de izquierdas muestran una mayor tolerancia en comparación con aquellas de ideología de derechas.
+
+Además, al considerar los factores socioeconómicos, se ha observado que las personas con un nivel socioeconómico más bajo pueden presentar una actitud más racista. Esta actitud podría atribuirse al temor de que los inmigrantes les quiten oportunidades laborales o que su aceptación de salarios más bajos ejerza presión a la baja sobre los salarios en general (Fernández et al., 2017; Cea D'Ancona y Valles Martínez, 2014).
+
+En cuanto al tercer objetivo, el análisis de perfiles ha permitido identificar tres conglomerados distintos en función de las actitudes hacia la inmigración, siguiendo la categorización propuesta por Cea D'Ancona (2004).
+Estos conglomerados son:
+
+-   Tolerantes: caracterizados por actitudes positivas y considerando que la cantidad de inmigrantes es insuficiente o aceptable.
+
+> Este grupo está compuesto por hombres jóvenes de 18 a 29 años, en municipios con más de 1.000.000 de habitantes, ateos, con estudios superiores, estudiantes o trabajadores, de orientación política de izquierdas, pertenecientes a la clase social media-alta y con una valoración económica favorable.
+
+-   Ambivalentes: tienen una actitud neutra hacia la inmigración. 
+
+> Está formado por adultos de mediana edad, con un nivel de estudios medios, personas indiferentes o no creyentes, de ideología de centro y derecha moderada, de clase media-media y en general las personas que no contestan o no saben.
+
+-   Reacios: muestran una opinión negativa sobre la inmigración y consideran que la cantidad de inmigrantes es elevada o excesiva.
+
+> Este conglomerado está compuesto por mujeres mayores de 65 años, católicas practicantes o no, con educación primaria o secundaria de primera etapa, desempeñando trabajos domésticos no remunerados, jubilados o pensionistas, de orientación política de derechas, pertenecientes a la clase social baja y con una valoración económica desfavorable.
+
+Así pues, se observa concordancia con el estudio de Cea D'Ancona(2004) en cuanto a la categorización de las personas en 3 grupos diferenciados por la actitud ante los inmigrantes. 
+
+No obstante, se reconocen ciertas limitaciones en este estudio.
+Sería recomendable realizar análisis multivariantes más exhaustivos como ampliación de este trabajo, ya que hubiese ofrecido una perspectiva aún más completa. Sin embargo, debido a la complejidad que conllevan estos análisis, se requiere de más tiempo de desarrollo para su implementación. 
+
+Además, es importante señalar que la muestra utilizada en este estudio no está equitativamente representada, ya que algunos estratos están infrarrepresentados, lo que condiciona el análisis estadístico.
+Para mejorar futuros estudios, aparte del análisis multivariante, se podría realizar una investigación similar con una muestra más amplia y equilibrada, garantizando una representación adecuada de los diferentes estratos. 
+
+Finalmente, es importante reconocer la relevancia del Grado de Sociología en este trabajo, ya que las asignaturas relacionadas con la estadística y las técnicas de producción de información cuantitativa, ciencia y minería de datos, análisis descriptivo e inferencial de datos en sociología, así como el análisis de datos asistido por ordenador, han sido fundamentales para el desarrollo metodológico y de análisis de este estudio.
+Además, la asignatura de sociología de la población y las migraciones ha sido especialmente influyente al proporcionar un sólido conocimiento sobre las migraciones y despertar mi interés en este tema. Y asimismo, considero que este trabajo es una manera satisfactoria de cerrar mi etapa académica de 4 años, marcando el inicio de mi vida laboral y de mis análisis de datos.
+
+\newpage 
+
+\nocite{*}
+
